@@ -1,4 +1,9 @@
 import { Sale } from "../../models/sale";
+import { HttpResponse } from "../protocols";
+
+export interface ICreateSaleController {
+    handle(): Promise<HttpResponse<Sale>>
+}
 
 export interface CreateSaleParams {
     type: string;
