@@ -5,9 +5,7 @@ import { MongoGetSalesRepository } from "./repositories/getSales/mongoGetSales";
 import { MongoClient } from "./database/mongo";
 import { MongoCreateSaleRepository } from "./repositories/createSales/mongoCreateSales";
 import { CreateSaleController } from "./controllers/createSale/createSale";
-
-
-
+import cors from "cors"
 
 const main = async () => {
 
@@ -15,7 +13,9 @@ const main = async () => {
     const port = process.env.PORT || 8000;
     const app = express();
     app.use(express.json())
+    app.use(cors({ origin: ['http://localhost:8888', 'http://127.0.0.1:5173'] }));
     await MongoClient.connect()
+
 
     app.get('/sales', async (req, res) => {
         const mongoGetSalesRepository = new MongoGetSalesRepository()
