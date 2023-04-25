@@ -2,22 +2,32 @@ import express from "express";
 import { config } from "dotenv";
 import { GetSalesControler } from "./controllers/getSales/getSales";
 import { MongoGetSalesRepository } from "./repositories/getSales/mongoGetSales";
+import { MongoClient } from "./database/mongo";
 
-config();
-const app = express();
 
-const port = process.env.PORT || 8000;
 
-app.listen(port, () => {
-    console.log(` listening on ${port}`)
-})
 
-app.get('/sales', async (req, res) => {
-    const mongoGetSalesRepository = new MongoGetSalesRepository()
-    const getSalesController = new GetSalesControler(mongoGetSalesRepository)
+const main = async () => {
 
-    const { body, statusCode } = await getSalesController.handle()
+    config();
+    const port = process.env.PORT || 8000;
+    const app = express();
+    await MongoClient.connect()
 
-    res.send(body).status(statusCode)
+    app.get('/sales', async (req, res) => {
+        const mongoGetSalesRepository = new MongoGetSalesRepository()
+        const getSalesController = new GetSalesControler(mongoGetSalesRepository)
 
-})
+        const { body, statusCode } = await getSalesController.handle()
+
+        res.send(body).status(statusCode)
+
+    })
+
+    app.listen(port, () => {
+        console.log(` listening on ${port}`)
+    })
+
+}
+
+main();
