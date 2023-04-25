@@ -1,8 +1,8 @@
 import { Sale } from "../../models/sale";
-import { HttpResponse } from "../protocols";
+import { HttpRequest, HttpResponse } from "../protocols";
 
 export interface ICreateSaleController {
-    handle(): Promise<HttpResponse<Sale>>
+    handle(httpRequest: HttpRequest<CreateSaleParams>): Promise<HttpResponse<Sale>>
 }
 
 export interface CreateSaleParams {

@@ -2,7 +2,7 @@ import { CreateSaleParams, ICreateSaleRepository } from "../../controllers/creat
 import { MongoClient } from "../../database/mongo";
 import { Sale } from "../../models/sale";
 
-export class MongoCreateSale implements ICreateSaleRepository {
+export class MongoCreateSaleRepository implements ICreateSaleRepository {
     async createSale(params: CreateSaleParams): Promise<Sale> {
         const { insertedId } = await MongoClient.db.collection('sales').insertOne(params)
 

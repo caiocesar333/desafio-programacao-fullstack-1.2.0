@@ -1,20 +1,30 @@
-import { MongoClient } from "../../database/mongo";
 import { Sale } from "../../models/sale";
-import { CreateSaleParams, ICreateSaleRepository } from "./protocols";
+import { HttpRequest, HttpResponse } from "../protocols";
+import { CreateSaleParams, ICreateSaleController, ICreateSaleRepository } from "./protocols";
 
-export class MongoCreateSale implements ICreateSaleRepository {
-    async createSale(params: CreateSaleParams): Promise<Sale> {
-        const { insertedId } = await MongoClient.db.collection('sales').insertOne(params)
+export class CreateSaleController implements ICreateSaleController {
+    constructor(private readonly createSaleRepository: ICreateSaleRepository) { }
 
+    async handle(httpRequest: HttpRequest<CreateSaleParams>): Promise<HttpResponse<Sale>> {
 
-        const sale = await MongoClient.db.collection<Omit<Sale, 'id'>>('sales').findOne({ _id: insertedId })
-
-        if (!sale) {
-            throw new Error('Sale was not created')
+        try {
+            if (!httpRequest.body) {
+                return {
+                    statusCode: 400,
+                    body: "Please specify a body"
+                }
+            }
+            const sale = await this.createSaleRepository.createSale(httpRequest.body);
+            return {
+                statusCode: 201,
+                body: sale
+            }
+        } catch (error) {
+            return {
+                statusCode: 500,
+                body: "Something went wrong"
+            }
         }
-
-        const { _id, ...rest } = sale
-
-        return { id: _id.toHexString(), ...rest }
     }
+
 }
