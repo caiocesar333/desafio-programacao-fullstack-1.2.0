@@ -46,6 +46,7 @@ const App = () => {
                                     </tr>
                                 </thead>
                                 {data.filter((item) => item.sale).map((item, index) => {
+                                    console.log(item);
                                     return <TransactionsTable
                                         key={index}
                                         date={item.sale[0].transactionDate}
@@ -60,9 +61,8 @@ const App = () => {
                 </div>
             </div>
 
-            <form className=''>
+            <form className='mb-10'>
                 <input type="file" onChange={handleFileChange} />
-                <p className=''>File content:</p>
                 {
                     fileContent ? <ParseData data={fileContent} /> : <></>
                 }
