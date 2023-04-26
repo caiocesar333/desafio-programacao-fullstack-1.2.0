@@ -2,13 +2,16 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import TransactionsTable from './components/TransactionsTable';
+import ParseData from './scripts/ParseData';
 
 const App = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [data, setData] = useState<any[]>([]);
 
     const [fileContent, setFileContent] = useState('');
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault()
         const file = event.target.files && event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -23,6 +26,7 @@ const App = () => {
         fetch('http://localhost:8000/sales')
             .then((res) => res.json())
             .then((data) => setData(data))
+
     }, [])
 
     return (
@@ -41,16 +45,16 @@ const App = () => {
                                         <th scope="col" className="px-6 py-4">Seller </th>
                                     </tr>
                                 </thead>
-                                {data.map((item) => (
-                                    <TransactionsTable
-                                        key={item.id}
-                                        date={item.transactionDate}
-                                        sellerName={item.seller}
-                                        productDescription={item.productDesc}
-                                        value={item.transactionValue}
-                                        type={item.transactionType}
+                                {data.filter((item) => item.sale).map((item, index) => {
+                                    return <TransactionsTable
+                                        key={index}
+                                        date={item.sale[0].transactionDate}
+                                        sellerName={item.sale[0].seller}
+                                        productDescription={item.sale[0].productDesc}
+                                        value={item.sale[0].transactionValue}
+                                        type={item.sale[0].transactionType}
                                     />
-                                ))}</table>
+                                })}</table>
                         </div>
                     </div>
                 </div>
@@ -59,7 +63,9 @@ const App = () => {
             <form className=''>
                 <input type="file" onChange={handleFileChange} />
                 <p className=''>File content:</p>
-                <pre>{fileContent}</pre>
+                {
+                    fileContent ? <ParseData data={fileContent} /> : <></>
+                }
             </form>
         </div>
 
