@@ -1,14 +1,17 @@
+
+
 export default TransactionsTable
 
 type Transaction = {
-    type?: string;
-    date?: string;
-    productDescription?: string;
-    value?: number;
-    sellerName?: string;
+    type: string;
+    date: string;
+    productDescription: string;
+    value: number;
+    sellerName: string;
 };
 
 function TransactionsTable({ type, date, productDescription, value, sellerName }: Transaction) {
+
     return (
 
         <tbody>
