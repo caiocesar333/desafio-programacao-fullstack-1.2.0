@@ -13,7 +13,7 @@ const main = async () => {
     const port = process.env.PORT || 8000;
     const app = express();
     app.use(express.json())
-    app.use(cors({ origin: ['http://localhost:8888', 'http://127.0.0.1:5173'] }));
+    app.use(cors({ origin: ['http://localhost:8000', 'http://127.0.0.1:5173'] }));
     await MongoClient.connect()
 
 
@@ -28,13 +28,10 @@ const main = async () => {
     })
     app.post('/sales', async (req, res) => {
         const mongoCreateSaleRepository = new MongoCreateSaleRepository();
-
         const createSaleController = new CreateSaleController(mongoCreateSaleRepository);
-
         const { body, statusCode } = await createSaleController.handle({ body: req.body });
-
-        res.send(body).status(statusCode)
-    })
+        res.send(body).status(statusCode);
+    });
 
     app.listen(port, () => {
         console.log(` listening on ${port}`)

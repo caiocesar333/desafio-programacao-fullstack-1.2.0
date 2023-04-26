@@ -8,18 +8,15 @@ export class CreateSaleController implements ICreateSaleController {
     async handle(httpRequest: HttpRequest<CreateSaleParams>): Promise<HttpResponse<Sale>> {
 
         try {
-            if (!httpRequest.body) {
-                return {
-                    statusCode: 400,
-                    body: "Please specify a body"
-                }
-            }
-            const sale = await this.createSaleRepository.createSale(httpRequest.body);
+            console.log(httpRequest.body)
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const sale = await this.createSaleRepository.createSale(httpRequest.body!);
             return {
                 statusCode: 201,
                 body: sale
             }
         } catch (error) {
+            console.log(error)
             return {
                 statusCode: 500,
                 body: "Something went wrong"

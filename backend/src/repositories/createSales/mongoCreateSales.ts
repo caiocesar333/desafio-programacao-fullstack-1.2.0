@@ -4,7 +4,7 @@ import { Sale } from "../../models/sale";
 
 export class MongoCreateSaleRepository implements ICreateSaleRepository {
     async createSale(params: CreateSaleParams): Promise<Sale> {
-        const { insertedId } = await MongoClient.db.collection('sales').insertOne(params)
+        const { insertedId } = await MongoClient.db.collection('sales').insertOne({ sale: params })
 
 
         const sale = await MongoClient.db.collection<Omit<Sale, 'id'>>('sales').findOne({ _id: insertedId })
