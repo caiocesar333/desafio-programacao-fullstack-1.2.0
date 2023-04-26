@@ -6,6 +6,8 @@ import { MongoClient } from "./database/mongo";
 import { MongoCreateSaleRepository } from "./repositories/createSales/mongoCreateSales";
 import { CreateSaleController } from "./controllers/createSale/createSale";
 import cors from "cors"
+import { MongoDeleteSaleRepository } from "./repositories/deleteSales/mongoDeleteSales";
+import { DeleteSaleController } from "./controllers/deleteSale/deleteSale";
 
 const main = async () => {
 
@@ -32,6 +34,17 @@ const main = async () => {
         const { body, statusCode } = await createSaleController.handle({ body: req.body });
         res.send(body).status(statusCode);
     });
+
+    app.delete("/sales/:id", async (req, res) => {
+        const mongoDeleteSaleRepository = new MongoDeleteSaleRepository()
+
+        const deleteSaleController = new DeleteSaleController(mongoDeleteSaleRepository);
+
+        const { body, statusCode } = await deleteSaleController.handle({
+            params: req.params
+        })
+        res.send(body).status(statusCode);
+    })
 
     app.listen(port, () => {
         console.log(` listening on ${port}`)
