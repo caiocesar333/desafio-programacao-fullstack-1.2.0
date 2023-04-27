@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -10,6 +11,8 @@ const App = () => {
     const [data, setData] = useState<any[]>([]);
     const [fileContent, setFileContent] = useState('');
     const [fileIsEmpty, setFileIsEmpty] = useState(false);
+    const [producerTotal, setProducerTotal] = useState(0)
+    const [affiliateTotal, setAffiliateTotal] = useState(0)
 
     const [producerAmount, setProducerAmount] = useState(0)
     const [afilliateAmount, setAffiliateAmount] = useState(0)
@@ -41,7 +44,7 @@ const App = () => {
             .then((data) => {
                 setData(data);
                 if (data.length > 0) {
-                    const evenDataValues = data?.filter((d, i) => i % 2 === 0);
+                    const evenDataValues = data?.filter((_d, i) => i % 2 === 0);
                     setDataValue(evenDataValues);
                     console.log(dataValue)
                 } else {
@@ -51,18 +54,17 @@ const App = () => {
     }, [])
 
     useEffect(() => {
-        let producerTotal = 0;
-        let affiliateTotal = 0;
-
 
         if (dataValue.length > 0) {
             dataValue.forEach((item) => {
-                if (item.transactionType === "1" || item.transactionType === "4") {
-                    producerTotal += item.transactionValue;
-                } else if (item.transactionType === "2") {
-                    affiliateTotal += item.transactionValue;
-                } else if (item.transactionType === "3") {
-                    producerTotal -= item.transactionValue;
+                for (let index = 0; index < item.sale.length; index++) {
+                    if (item.sale[index].transactionType === "1" || item.sale[index].transactionType === "4") {
+                        setProducerTotal(prevProducerTotal => prevProducerTotal + item.sale[index].transactionValue);
+                    } else if (item.sale[index].transactionType === "2") {
+                        setAffiliateTotal(prevAffiliateTotal => prevAffiliateTotal + item.sale[index].transactionValue);
+                    } else if (item.sale[index].transactionType === "3") {
+                        setProducerTotal(prevProducerTotal => prevProducerTotal - item.sale[index].transactionValue);
+                    }
                 }
             });
         }
@@ -70,7 +72,10 @@ const App = () => {
         setProducerAmount(producerTotal);
         setAffiliateAmount(affiliateTotal);
 
+
+
     }, [data])
+
 
 
     return (
@@ -96,7 +101,6 @@ const App = () => {
 
                                     {dataValue ?
                                         dataValue.map((item) => {
-                                            console.log(item.sale.length)
                                             const sales: React.ReactNode[] = [];
                                             for (let index = 0; index < item.sale.length; index++) {
                                                 sales.push(
@@ -150,6 +154,6 @@ const App = () => {
         </div >
 
     );
-};
+}
 
 export default App
