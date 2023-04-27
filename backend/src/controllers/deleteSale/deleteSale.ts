@@ -10,11 +10,19 @@ export class DeleteSaleController implements IDeleteSaleController {
         try {
             const id = httpRequest?.params?.id
             if (!id) {
+                const deletedCount = await this.deleteSaleRepository.deleteAllSales();
                 return {
-                    statusCode: 400,
-                    body: "Missing Id",
+                    statusCode: 200,
+                    body: JSON.stringify(deletedCount),
                 }
             }
+            // else {
+            // const deletedCount = await this.deleteSaleRepository.deleteAllSales();
+            //     return {
+            //         statusCode: 200,
+            //         body: JSON.stringify(deletedCount),
+            //     }
+            // }
             const sale = await this.deleteSaleRepository.deleteSale(id)
             return {
                 statusCode: 200,

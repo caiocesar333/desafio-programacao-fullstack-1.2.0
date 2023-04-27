@@ -46,6 +46,18 @@ const main = async () => {
         res.send(body).status(statusCode);
     })
 
+    app.delete("/sales", async (req, res) => {
+        const mongoDeleteSaleRepository = new MongoDeleteSaleRepository();
+
+        const deleteSaleController = new DeleteSaleController(mongoDeleteSaleRepository);
+
+        const { body, statusCode } = await deleteSaleController.handle({
+            params: req.params
+        });
+
+        res.send(body).status(statusCode);
+    });
+
     app.listen(port, () => {
         console.log(` listening on ${port}`)
     })

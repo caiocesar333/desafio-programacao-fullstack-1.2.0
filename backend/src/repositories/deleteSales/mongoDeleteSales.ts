@@ -4,6 +4,10 @@ import { MongoClient } from "../../database/mongo";
 import { Sale } from "../../models/sale";
 
 export class MongoDeleteSaleRepository implements IDeleteSaleRepository {
+    async deleteAllSales(): Promise<number> {
+        const { deletedCount } = await MongoClient.db.collection("sales").deleteMany({});
+        return deletedCount || 0;
+    }
     async deleteSale(id: string): Promise<Sale> {
         const sale = await MongoClient.db
             .collection<Omit<Sale, "id">>('sales')

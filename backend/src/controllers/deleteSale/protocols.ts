@@ -9,4 +9,5 @@ export interface IDeleteSaleController {
 
 export interface IDeleteSaleRepository {
     deleteSale(id: string): Promise<Sale>
+    deleteAllSales(): Promise<number>;
 }
