@@ -41,7 +41,9 @@ const App = () => {
             .then((data) => {
                 setData(data);
                 if (data.length > 0) {
-                    setDataValue(data[0].sale)
+                    const evenDataValues = data?.filter((d, i) => i % 2 === 0);
+                    setDataValue(evenDataValues);
+                    console.log(dataValue)
                 } else {
                     setDataValue([])
                 }
@@ -93,16 +95,22 @@ const App = () => {
                                     </thead>
 
                                     {dataValue ?
-                                        dataValue.map((item, index) => {
-                                            console.log(item)
-                                            return <TransactionsTable
-                                                key={index}
-                                                type={item.transactionType}
-                                                date={item.transactionDate}
-                                                productDescription={item.productDesc}
-                                                value={item.transactionValue}
-                                                sellerName={item.seller}
-                                            />
+                                        dataValue.map((item) => {
+                                            console.log(item.sale.length)
+                                            const sales: React.ReactNode[] = [];
+                                            for (let index = 0; index < item.sale.length; index++) {
+                                                sales.push(
+                                                    <TransactionsTable
+                                                        key={index}
+                                                        type={item.sale[index].transactionType}
+                                                        date={item.sale[index].transactionDate}
+                                                        productDescription={item.sale[index].productDesc}
+                                                        value={item.sale[index].transactionValue}
+                                                        sellerName={item.sale[index].seller}
+                                                    />
+                                                );
+                                            }
+                                            return <>{sales}</>;
                                         })
                                         : <></>}
                                 </table>
