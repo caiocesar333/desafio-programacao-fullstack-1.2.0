@@ -34,42 +34,32 @@ Docker Desktop
 
 ### 🔧 Installation
 
-```
-Execute the cloning of the repository with *git -clone https://github.com/caiocesar333/desafio-programacao-fullstack-1.2.0*
+Execute the cloning of the repository with _git -clone
+https://github.com/caiocesar333/desafio-programacao-fullstack-1.2.0_
 
 After cloning the repository, open the folder in VSCode
 
----
+#### For backend:
 
-For backend:
+1. _cd backend_
 
-*cd backend*
+2. _Build SQL database with Docker_
 
-*Build SQL database with Docker*
+3. _npm install_ to install dependencies
 
-*npm install* to install dependencies
+4. _npm run start:dev_ to build the project
 
-*npm run start:dev* to build the project
+#### For Frontend
 
----
+1. _cd frontend_
 
-For Frontend
+2. _cd react-ts_
 
-*cd frontend*
+3. _npm install_ to install dependencies
 
-*cd react-ts*
+4. _npm run dev_ to start development server
 
-*npm install* to install dependencies
-
-*npm run dev* to start development server
-
-*npm build*  to build vite and tsc project
-
----
-
-```
-
-Sure, here is the Docker section in markdown format:
+5. _npm build_ to build vite and tsc project
 
 ## 🐳 Docker
 
@@ -96,23 +86,9 @@ to `http://localhost:8000` in your web browser.
 
 ## ⚙️ Running the tests
 
-Explain how to run the automated tests for this system.
-
 ### 🔩 Break down into end to end tests
 
-Explain what these tests test and why.
-
-```
-Give examples
-```
-
 ### ⌨️ And coding style tests
-
-Explain what these tests test and why.
-
-```
-Give examples
-```
 
 ## 🛠️ Built With
 
