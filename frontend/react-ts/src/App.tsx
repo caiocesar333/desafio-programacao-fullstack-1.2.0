@@ -3,11 +3,13 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import TransactionsTable from './components/TransactionsTable';
 import ParseData from './scripts/ParseData';
+import ErrorComponent from './components/ErrorComponent';
 
 const App = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [data, setData] = useState<any[]>([]);
     const [fileContent, setFileContent] = useState('');
+    const [fileIsEmpty, setFileIsEmpty] = useState(false);
 
     const [producerAmount, setProducerAmount] = useState(0)
     const [afilliateAmount, setAffiliateAmount] = useState(0)
@@ -21,7 +23,13 @@ const App = () => {
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                setFileContent(e.target?.result as string);
+                if (e.target?.result) {
+                    setFileContent(e.target?.result as string);
+                    window.location.reload();
+                }
+                else {
+                    setFileIsEmpty(true)
+                }
             };
             reader.readAsText(file);
         }
@@ -70,6 +78,9 @@ const App = () => {
                     <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                             <div className="overflow-hidden">
+                                {
+                                    fileIsEmpty ? <ErrorComponent message='The file that you provided is empty' /> : <></>
+                                }
                                 <table className="min-w-full text-left text-sm font-light border mt-4">
                                     <thead className="border-b font-medium dark:border-neutral-500">
                                         <tr>
@@ -80,6 +91,7 @@ const App = () => {
                                             <th scope="col" className="px-6 py-4">Seller </th>
                                         </tr>
                                     </thead>
+
                                     {dataValue ?
                                         dataValue.map((item, index) => {
                                             console.log(item)
