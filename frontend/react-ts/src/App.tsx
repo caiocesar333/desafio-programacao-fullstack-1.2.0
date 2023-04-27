@@ -12,6 +12,8 @@ const App = () => {
     const [producerAmount, setProducerAmount] = useState(0)
     const [afilliateAmount, setAffiliateAmount] = useState(0)
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [dataValue, setDataValue] = useState<any[]>([])
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault()
@@ -28,27 +30,38 @@ const App = () => {
     useEffect(() => {
         fetch('http://localhost:8000/sales')
             .then((res) => res.json())
-            .then((data) => setData(data))
+            .then((data) => {
+                setData(data);
+                if (data.length > 0) {
+                    setDataValue(data[0].sale)
+                } else {
+                    setDataValue([])
+                }
+            });
+    }, [])
+
+    useEffect(() => {
         let producerTotal = 0;
         let affiliateTotal = 0;
 
-        {
-            data.filter((item) => item.sale).map((item) => {
-                if (item.sale[0].transactionType == "1" || item.type == "4") {
-                    producerTotal += item.sale[0].transactionValue;
-                } else if (item.sale[0].transactionType == "2") {
-                    affiliateTotal += item.sale[0].transactionValue;
-                } else if (item.sale[0].transactionType == "3") {
-                    producerTotal -= item.sale[0].transactionValue;
-                }
-            })
-        }
 
+        if (dataValue.length > 0) {
+            dataValue.forEach((item) => {
+                if (item.transactionType === "1" || item.transactionType === "4") {
+                    producerTotal += item.transactionValue;
+                } else if (item.transactionType === "2") {
+                    affiliateTotal += item.transactionValue;
+                } else if (item.transactionType === "3") {
+                    producerTotal -= item.transactionValue;
+                }
+            });
+        }
 
         setProducerAmount(producerTotal);
         setAffiliateAmount(affiliateTotal);
 
     }, [data])
+
 
     return (
         <div className='flex'>
@@ -67,28 +80,24 @@ const App = () => {
                                             <th scope="col" className="px-6 py-4">Seller </th>
                                         </tr>
                                     </thead>
-                                    {data.filter((item) => item.sale).map((item, index) => {
-                                        return <TransactionsTable
-                                            key={index}
-                                            date={item.sale[0].transactionDate}
-                                            sellerName={item.sale[0].seller}
-                                            productDescription={item.sale[0].productDesc}
-                                            value={item.sale[0].transactionValue}
-                                            type={item.sale[0].transactionType}
-                                        />
-                                    })}</table>
+                                    {dataValue ?
+                                        dataValue.map((item, index) => {
+                                            console.log(item)
+                                            return <TransactionsTable
+                                                key={index}
+                                                type={item.transactionType}
+                                                date={item.transactionDate}
+                                                productDescription={item.productDesc}
+                                                value={item.transactionValue}
+                                                sellerName={item.seller}
+                                            />
+                                        })
+                                        : <></>}
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <form className='mb-10'>
-                    <input type="file" onChange={handleFileChange} />
-                    {
-                        fileContent ? <ParseData data={fileContent} /> : <></>
-                    }
-                </form>
-
             </div>
             <div className='flex flex-col gap-7'>
                 <div className='w-full border h-fit ml-5 mt-6'>
