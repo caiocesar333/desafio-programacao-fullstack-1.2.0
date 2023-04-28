@@ -103,6 +103,7 @@ const App = () => {
                                         dataValue.map((item) => {
                                             const sales: React.ReactNode[] = [];
                                             for (let index = 0; index < item.sale.length; index++) {
+                                                console.log(dataValue)
                                                 sales.push(
                                                     <TransactionsTable
                                                         key={index}
