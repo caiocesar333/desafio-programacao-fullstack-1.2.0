@@ -13,7 +13,7 @@ export class GetSalesControler implements IGetSalesController {
         } catch (error) {
             return {
                 statusCode: 500,
-                body: "Something went wrong",
+                body: JSON.stringify({ message: "Something went wrong" }),
             }
         }
 

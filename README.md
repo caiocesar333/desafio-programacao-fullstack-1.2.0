@@ -112,7 +112,7 @@ These tests are designed to check the code for any syntax errors and to ensure
 that it conforms to the coding style standards used in this project. Running
 these tests before committing code changes is highly recommended.
 
-##### Check the **[Sales](#-sales)** to see the tests content
+##### Check the **[Sales](#sales)** to see the tests content
 
 _P.S: Note that "DeleteSales" doenst have tests because its a optional
 functionality made for table and database control while debugging the

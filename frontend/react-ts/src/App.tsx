@@ -7,6 +7,7 @@ import ParseData from './scripts/ParseData';
 import ErrorComponent from './components/ErrorComponent';
 
 const App = () => {
+    //States Creation
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [data, setData] = useState<any[]>([]);
     const [fileContent, setFileContent] = useState('');
@@ -19,6 +20,8 @@ const App = () => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [dataValue, setDataValue] = useState<any[]>([])
+
+    //Getting the file content
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault()
@@ -38,6 +41,7 @@ const App = () => {
         }
     };
 
+    //Fecthing the backend data
     useEffect(() => {
         fetch('http://localhost:8000/sales')
             .then((res) => res.json())
@@ -53,8 +57,8 @@ const App = () => {
             });
     }, [])
 
+    //Afilliante and producer amount calculation
     useEffect(() => {
-
         if (dataValue.length > 0) {
             dataValue.forEach((item) => {
                 for (let index = 0; index < item.sale.length; index++) {
@@ -68,15 +72,9 @@ const App = () => {
                 }
             });
         }
-
         setProducerAmount(producerTotal);
         setAffiliateAmount(affiliateTotal);
-
-
-
     }, [data])
-
-
 
     return (
         <div className='flex'>
@@ -98,7 +96,6 @@ const App = () => {
                                             <th scope="col" className="px-6 py-4">Seller </th>
                                         </tr>
                                     </thead>
-
                                     {dataValue ?
                                         dataValue.map((item) => {
                                             const sales: React.ReactNode[] = [];
