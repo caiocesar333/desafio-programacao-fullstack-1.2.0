@@ -1,9 +1,9 @@
 export interface Sale {
-    id: string
-    transactionType: string;
-    transactionDate: string;
+    id?: string
+    type: string;
+    date: string;
     productDesc: string;
-    transactionValue: number;
-    seller: string;
+    value: number;
+    selleName: string;
 
 }
